@@ -1,38 +1,40 @@
 #!/bin/bash
 
 # Criador : LUCIANO PEREIRA DE SOUZA
-# Finalidade : Cria um servidor de torrents.
-# Como instalar : bash ./qbittorrent-server.sh
+# Finalidade : Criar um servidor de torrents.
+# Como instalar : bash qbittorrent-server.sh
 # Como acesar : No navegador digite o IP do servidor e a porta
     # Exemplo : 192.168.0.10:8080
     # Login : admin
     # Senha : adminadmin
 
+App="qbittorrent"
+Servico="qbit.service"
 
 # Instalação do qbittorrent
-apt install qbittorrent-nox
+apt install $App-nox -y
 
-# Criação do arquivo qbittorrent.service.
+# Criação do arquivo de serviço.
 echo -e "\
 [Unit]
 Description=qbittorrent
 After=network.target syslog.target
 [Service]
 Type=simple
-ExecStart=/usr/bin/qbittorrent-nox
-ExecStop=/usr/bin/killall qbittorrent-nox
+ExecStart=/usr/bin/$App-nox
+ExecStop=/usr/bin/killall $App-nox
 restart=on-failure
 [Install]
-WantedBy=multi-user.target\n" >> /lib/systemd/system/qbittorrent.service
+WantedBy=multi-user.target\n" >> /lib/systemd/system/$Servico
 
 # Reinicia o daemon.
 systemctl daemon-reload
 
 # Habilita na inicialização do sistema.
-systemctl enable qbittorrent.service
+systemctl enable $Servico
 
 # Inicia o serviço.
-systemctl start qbittorrent.service
+systemctl start $Servico
 
 # Mostra o status do serviço.
-systemctl status qbittorrent.service
+systemctl status $Servico
