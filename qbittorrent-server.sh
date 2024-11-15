@@ -38,3 +38,7 @@ systemctl start $Servico
 
 # Mostra o status do serviço.
 systemctl status $Servico
+
+#=== Reseta a senha ===#
+# sed -r "/WebUI.Password_PBKDF2/d" /.config/qBittorrent/qBittorrent.conf -i
+# sed -r "/WebUI.Username=admin/d"  /.config/qBittorrent/qBittorrent.conf -i
