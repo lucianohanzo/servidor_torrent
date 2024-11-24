@@ -19,10 +19,11 @@ ping google.com -c4 > /dev/null 2>&1
 [ $? -ne 0 ] && echo "Sem Internet ou DNS não configurado." && exit 2
 
 echo -e "Instalando servidor de torrents...\n\n" ; sleep 2
+echo -e "Verificando killall e 7zip."
 # Instala o comando killall, caso não esteja instalado.
 [ -f /usr/bin/killall ] || apt install psmisc -y > /dev/null 2>&1
 [ -f /usr/bin/7z ] || apt install p7zip-full -y > /dev/null 2>&1
-
+echo -e "Verificado!\n\n"
 
 echo -e "Criando certificado..." && sleep 2
 openssl req -x509 -nodes -newkey rsa:4096        \
@@ -41,6 +42,7 @@ arquivo="x86_64-qbittorrent-nox"
 
 [ -d $caminho ] || mkdir -p $caminho
 
+echo -e "Descompactando arquivo $arquivo_compactado." && sleeep 1
 if [ -f $arquivo_compactado ]; then
     cp $arquivo_compactado $caminho
     7z x $caminho/$(basename $arquivo_compactado) -o$caminho > /dev/null 2>&1
@@ -51,9 +53,10 @@ else
     echo "Arquivo $arquivo não existe!"
     exit 3
 fi
-
+echo -e "Arquivo \"$arquivo_compactado\" descompactado\n\n" && sleep 1
 
 # Criação do arquivo de serviço.
+echo -e "Criando processo." && sleep 1
 echo -e "\
 [Unit]
 Description=qbittorrent
@@ -66,6 +69,7 @@ restart=on-failure
 [Install]
 WantedBy=multi-user.target\n" >> /lib/systemd/system/$servico
 
+echo -e "Processo criado.\n\n" && sleep 2
 
 # Reinicia o daemon.
 systemctl daemon-reload
@@ -84,6 +88,7 @@ systemctl stop $servico
 read -p "Defina a porta de serviço web : " porta
 
 # Define a senha como adminadmin.
+echo -e "Criando arquivo de configuração.\n\n" && sleep 2
 echo -e "\
 [BitTorrent]
 Session\\\AddTorrentStopped=false
@@ -110,7 +115,7 @@ WebUI\\\HTTPS\\\KeyPath=/etc/ssl/private/qbittorrent.key
 WebUI\\\Password_PBKDF2=\"@ByteArray(cjrkEmcVmY/rGCtkbKgKkA==:3EE66W4epajReEKx0/1O14miX2O0W+5x+1fs8DcDXyZPzZ7ZDqFKZFuJLxDoQYM9rf28MJQ/izfxr6nN7ArF8A==)\"
 WebUI\\\Port=$porta\n" > /.config/qBittorrent/qBittorrent.conf
 
-
+echo "Arquivo de configuração criado!" && sleep 1
 # Inicia o serviço.
 systemctl start $servico
 
