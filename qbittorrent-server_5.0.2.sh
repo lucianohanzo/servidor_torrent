@@ -35,7 +35,7 @@ set -x
 servico="qbittorrent-nox.service"
 caminho="/usr/bin/qbittorrent-nox"
 arquivo_compactado=$(find / -type f -iregex ".*x86_64-qbittorrent-nox.7z" \
-                     | xargs realpath)
+                     | head -n1 | xargs realpath)
 arquivo="x86_64-qbittorrent-nox"
 
 [ -d $caminho ] || mkdir -p $caminho
