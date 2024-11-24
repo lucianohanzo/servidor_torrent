@@ -42,10 +42,10 @@ arquivo="x86_64-qbittorrent-nox"
 
 [ -d $caminho ] || mkdir -p $caminho
 
-echo -e "Descompactando arquivo $arquivo_compactado." && sleeep 1
+echo -e "Descompactando arquivo $arquivo_compactado." && sleep 1
 if [ -f $arquivo_compactado ]; then
     cp $arquivo_compactado $caminho
-    7z x $caminho/$(basename $arquivo_compactado) -o$caminho > /dev/null 2>&1
+    7z x $caminho/$(basename $arquivo_compactado) -o$caminho -y > /dev/null 2>&1
     [ $? -ne 0 ] && echo "Erro ao descompactar!" && exit 3
 
     chmod +x $caminho/$(basename $arquivo_compactado .7z)
