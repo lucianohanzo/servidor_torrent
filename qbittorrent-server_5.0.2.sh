@@ -29,7 +29,7 @@ openssl req -x509 -nodes -newkey rsa:4096        \
         -keyout /etc/ssl/private/qbittorrent.key \
         -out /etc/ssl/private/qbittorrent.cert   \
         -subj "/CN=qBittorrent"
-echo
+echo -e "Certificado criado!\n" && sleep 2
 
 
 servico="qbittorrent-nox.service"
