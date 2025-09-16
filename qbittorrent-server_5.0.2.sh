@@ -136,9 +136,9 @@ systemctl status $servico
 
 
 #=== Como desinstalar ===#
-# Pare o serviço -> systemctl start qbittorrent-nox.service
+# Pare o serviço -> systemctl stop qbittorrent-nox.service
 # Tire da inicialização -> systemctl disable qbittorrent-nox.service
 # Remova o arquivo do daemon -> rm /lib/systemd/system/qbittorrent-nox.service
-# Remova o arquivo de configuração -> /.config/qBittorrent/qBittorrent.conf
+# Remova o arquivo de configuração -> rm /.config/qBittorrent/qBittorrent.conf
 # Reinicia o daemon -> systemctl daemon-reload
 
