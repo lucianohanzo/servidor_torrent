@@ -76,7 +76,7 @@ After=network.target syslog.target
 Type=simple
 ExecStart=$caminho/$arquivo
 ExecStop=/usr/bin/killall $caminho/$arquivo
-restart=on-failure
+restart=always
 [Install]
 WantedBy=multi-user.target\n" >> /lib/systemd/system/$servico
 
