@@ -72,13 +72,15 @@ echo -e "\
 [Unit]
 Description=qbittorrent
 After=network.target syslog.target
+
 [Service]
 Type=simple
 ExecStart=$caminho/$arquivo
 ExecStop=/usr/bin/killall $caminho/$arquivo
-restart=always
+Restart=always
+
 [Install]
-WantedBy=multi-user.target\n" >> /lib/systemd/system/$servico
+WantedBy=multi-user.target\n" > /lib/systemd/system/$servico
 
 echo -e "Processo criado.\n\n" && sleep 2
 
