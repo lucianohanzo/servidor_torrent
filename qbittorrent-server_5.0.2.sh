@@ -80,7 +80,7 @@ ExecStop=/usr/bin/killall $caminho/$arquivo
 Restart=always
 
 [Install]
-WantedBy=multi-user.target\n" > /lib/systemd/system/$servico
+WantedBy=multi-user.target\n" > /etc/systemd/system/$servico
 
 echo -e "Processo criado.\n\n" && sleep 2
 
@@ -140,7 +140,7 @@ systemctl status $servico
 #=== Como desinstalar ===#
 # Pare o serviço -> systemctl stop qbittorrent-nox.service
 # Tire da inicialização -> systemctl disable qbittorrent-nox.service
-# Remova o arquivo do daemon -> rm /lib/systemd/system/qbittorrent-nox.service
+# Remova o arquivo do daemon -> rm /etc/systemd/system/qbittorrent-nox.service
 # Remova o arquivo de configuração -> rm /.config/qBittorrent/qBittorrent.conf
 # Reinicia o daemon -> systemctl daemon-reload
 

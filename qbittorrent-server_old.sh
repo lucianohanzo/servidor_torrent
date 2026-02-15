@@ -9,7 +9,7 @@
     # Senha : adminadmin
 
 App="qbittorrent"
-servico="qbit.service"
+servico="qbittorrent.service"
 
 # Instalação do qbittorrent
 apt install $App-nox -y
@@ -25,7 +25,7 @@ ExecStart=/usr/bin/$App-nox
 ExecStop=/usr/bin/killall $App-nox
 restart=on-failure
 [Install]
-WantedBy=multi-user.target\n" >> /lib/systemd/system/$servico
+WantedBy=multi-user.target\n" >> /etc/systemd/system/$servico
 
 # Reinicia o daemon.
 systemctl daemon-reload
