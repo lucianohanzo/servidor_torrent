@@ -23,8 +23,8 @@ arquitetura=$(uname -m)
 
 
 # Armazena arquivos em váriaveis.
-arquivo_x86_64="x86_64-qbittorrent-nox"
-arquivo_aarch64="aarch64-qbittorrent-nox"
+arquivo_x86_64=$(realpath  $(find . -type f -name "*aarch64-qbittorrent-nox.tar.xz"))
+arquivo_aarch64=$(realpath $(find . -type f -name "*x86_64-qbittorrent-nox.tar.xz" ))
 arquivo_bin=
 
 
@@ -36,22 +36,22 @@ function descompac_tar(){
 
 # Move o arquivo qbittorrent-nox para o ~/.local do usuário.
 if   [ "$arquitetura" = "x86_64" ]; then
-    if [ -f "${arquivo_x86_64}.tar.xz" ]; then
-        descompac_tar "${arquivo_x86_64}.tar.xz"
-        chmod +x "$arquivo_x86_64"
-        mv "$arquivo_x86_64" "$pasta_bin"
-        arquivo_bin="$arquivo_x86_64"
+    if [ -f "${arquivo_x86_64}" ]; then
+        descompac_tar "${arquivo_x86_64}"
+        chmod +x "${arquivo_x86_64%%.*}"
+        mv "${arquivo_x86_64%%.*}" "$pasta_bin"
+        arquivo_bin="${arquivo_x86_64%%.*}"
     else
-        echo "Arquivo ${arquivo_x86_64}.tar.xz, não existe!" ; exit 1
+        echo "Arquivo ${arquivo_x86_64}, não existe!" ; exit 1
     fi
 elif [ "$arquitetura" = "aarch64" ]; then
-    if [ -f "${arquivo_aarch64}.tar.xz" ]; then
-        descompac_tar "${arquivo_aarch64}.tar.xz"
-        chmod +x "$arquivo_aarch64"
-        mv "$arquivo_aarch64" "$pasta_bin"
-        arquivo_bin="$arquivo_aarch64"
+    if [ -f "${arquivo_aarch64}" ]; then
+        descompac_tar "${arquivo_aarch64}"
+        chmod +x "${arquivo_aarch64%%.*}"
+        mv "${arquivo_aarch64%%.*}" "$pasta_bin"
+        arquivo_bin="${arquivo_aarch64%%.*}"
     else
-        echo "Arquivo ${arquivo_aarch64}.tar.xz, não existe!" ; exit 2
+        echo "Arquivo ${arquivo_aarch64}, não existe!" ; exit 2
     fi
 fi
 
