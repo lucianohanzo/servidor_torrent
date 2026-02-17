@@ -23,21 +23,21 @@ arquitetura=$(uname -m)
 
 
 # Armazena arquivos em váriaveis.
-arquivo_x86_64=$(realpath  $(find . -type f -name "*aarch64-qbittorrent-nox.tar.xz"))
-arquivo_aarch64=$(realpath $(find . -type f -name "*x86_64-qbittorrent-nox.tar.xz" ))
+arquivo_x86_64=$(realpath  $(find . -type f -name "*x86_64-qbittorrent-nox.tar.xz"))
+arquivo_aarch64=$(realpath $(find . -type f -name "*aarch64-qbittorrent-nox.tar.xz" ))
 arquivo_bin=
 
 
 # Descompacta arquivo .tar.xz.
 function descompac_tar(){
-    tar -xJf "$1"
+    tar -xJvf "$1" -C "$2"
 }
 
 
 # Move o arquivo qbittorrent-nox para o ~/.local do usuário.
 if   [ "$arquitetura" = "x86_64" ]; then
     if [ -f "${arquivo_x86_64}" ]; then
-        descompac_tar "${arquivo_x86_64}"
+        descompac_tar "${arquivo_x86_64}" "$(dirname "${arquivo_x86_64}")"
         chmod +x "${arquivo_x86_64%%.*}"
         mv "${arquivo_x86_64%%.*}" "$pasta_bin"
         arquivo_bin="${arquivo_x86_64%%.*}"
@@ -46,7 +46,10 @@ if   [ "$arquitetura" = "x86_64" ]; then
     fi
 elif [ "$arquitetura" = "aarch64" ]; then
     if [ -f "${arquivo_aarch64}" ]; then
-        descompac_tar "${arquivo_aarch64}"
+        echo "$arquivo_aarch64"
+
+        descompac_tar "${arquivo_aarch64}" "$(dirname "${arquivo_aarch64}")"
+
         chmod +x "${arquivo_aarch64%%.*}"
         mv "${arquivo_aarch64%%.*}" "$pasta_bin"
         arquivo_bin="${arquivo_aarch64%%.*}"
@@ -131,11 +134,3 @@ systemctl --user status qbittorrent-nox.service
 # Remova o arquivo do daemon -> rm $HOME/.config/systemd/user/qbittorrent-nox.service
 # Remova o arquivo de configuração -> rm $HOME/.config/qBittorrent/qBittorrent.conf
 # Reinicia o daemon -> systemctl --user daemon-reload
-
-
-
-
-
-
-
-
