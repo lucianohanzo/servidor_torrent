@@ -10,9 +10,9 @@
 
 
 # Cria as pastas, caso não existam.
-pasta_systemd="$HOME/.config/systemd/user/"
-pasta_bin=$HOME/.local/bin/
-pasta_ssl=$HOME/.local/ssl/qbittorrent-nox/
+pasta_systemd="$HOME/.config/systemd/user"
+pasta_bin="$HOME/.local/bin"
+pasta_ssl="$HOME/.local/ssl/qbittorrent-nox"
 [ -d "$pasta_systemd" ] || mkdir -p "$pasta_systemd"
 [ -d "$pasta_bin" ]     || mkdir -p "$pasta_bin"
 [ -d "$pasta_ssl" ]     || mkdir -p "$pasta_ssl"
@@ -40,7 +40,7 @@ if   [ "$arquitetura" = "x86_64" ]; then
         descompac_tar "${arquivo_x86_64}" "$(dirname "${arquivo_x86_64}")"
         chmod +x "${arquivo_x86_64%%.*}"
         mv "${arquivo_x86_64%%.*}" "$pasta_bin"
-        arquivo_bin="${arquivo_x86_64%%.*}"
+        arquivo_bin="x86_64-qbittorrent-nox"
     else
         echo "Arquivo ${arquivo_x86_64}, não existe!" ; exit 1
     fi
@@ -52,7 +52,7 @@ elif [ "$arquitetura" = "aarch64" ]; then
 
         chmod +x "${arquivo_aarch64%%.*}"
         mv "${arquivo_aarch64%%.*}" "$pasta_bin"
-        arquivo_bin="${arquivo_aarch64%%.*}"
+        arquivo_bin="aarch64-qbittorrent-nox"
     else
         echo "Arquivo ${arquivo_aarch64}, não existe!" ; exit 2
     fi
@@ -70,7 +70,7 @@ ExecStart=${pasta_bin}/${arquivo_bin}
 Restart=on-failure
 
 [Install]
-WantedBy=default.target" >> "${pasta_systemd}/qbittorrent-nox.service"
+WantedBy=default.target" > "${pasta_systemd}/qbittorrent-nox.service"
 
 
 # Inicia serviço qbittorrent-nox
