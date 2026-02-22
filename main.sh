@@ -65,6 +65,7 @@ Description=qBittorrent-nox (User Mode)
 After=network.target
 
 [Service]
+UMask=0002
 Type=simple
 ExecStart=${pasta_bin}/${arquivo_bin}
 Restart=on-failure
