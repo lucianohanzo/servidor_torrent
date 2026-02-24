@@ -2,11 +2,13 @@
 
 # Criador : LUCIANO PEREIRA DE SOUZA
 # Finalidade : Criar um servidor de torrents.
-# Como instalar : bash qbittorrent-server.sh
+
+#=== Instruções ===#
+# Como instalar : bash main.sh
 # Como acesar : No navegador digite o IP do servidor e a porta
-    # Exemplo : 192.168.0.10:8080
-    # Login : admin
-    # Senha : adminadmin
+# Exemplo : 192.168.0.10:8080
+# Login Padrão : admin
+# Senha Padrão : adminadmin
 
 versao="2.0"
 
