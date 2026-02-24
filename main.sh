@@ -145,12 +145,13 @@ openssl req -x509 -nodes -newkey rsa:4096        \
         -keyout ${pasta_ssl}/qbittorrent-nox.key \
         -out ${pasta_ssl}/qbittorrent-nox.cert   \
         -subj "/CN=qBittorrent"
-echo -e "Certificado criado!\n" && sleep 2
+echo -e "Certificado criado!" && sleep 2
 
 
 # Define a porta de acesso via web.
 systemctl stop qbittorrent-nox.service ; sleep 1
 
+echo "\n#=== Definindo porta de serviço web ===#"
 read -p "Defina a porta de serviço web : " porta
 
 # Define a senha como adminadmin.
