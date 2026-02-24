@@ -31,10 +31,11 @@ fi
 pasta_systemd="/etc/systemd/system"
 pasta_bin="/usr/local/bin"
 pasta_ssl="/etc/ssl/qbittorrent-nox"
+pasta_config="$HOME/.config/qBittorrent"
 [ -d "$pasta_systemd" ] || mkdir -p "$pasta_systemd"
 [ -d "$pasta_bin" ]     || mkdir -p "$pasta_bin"
 [ -d "$pasta_ssl" ]     || mkdir -p "$pasta_ssl"
-
+[ -d "$pasta_config"]   || mkdir -p "$pasta_config"
 
 # Cria grupo de torrents caso não exista.
 comando="$(cut -d: -f1 /etc/group | grep torrents)"
@@ -42,7 +43,9 @@ if [ "$comando" != "torrents" ]; then
     groupadd torrents
 fi
 
-echo -e "\n\nFoi criado um grupo de 'torrents'."
+echo "#=== Instalando Servidor de Torrents ===#" ; sleep 2.5
+
+echo -e "\nFoi criado um grupo de 'torrents'."
 echo -e "Lembre-se de adicionar seu usuário do SAMBA no grupo 'torrents'."
 echo -e "\tCaso tenha o SAMBA instalado!"
 
@@ -50,8 +53,8 @@ echo -e "\tCaso tenha o SAMBA instalado!"
 definicao_umask=0007
 while true; do
     echo -e "\n\n#=== Definindo o nível de segurança dos arquivos. ===#"
-    echo "1. Usuário que não estão no grupo 'torrents', pode ver e copiar arquivos."
-    echo "2. Usuário que não estão no grupo 'torrents', não pode ver nada"
+    echo "1. Usuário que não está no grupo 'torrents', pode ver e copiar arquivos."
+    echo "2. Usuário que não está no grupo 'torrents', não pode ver nada."
     echo
     read -p "Escolha uma definição de segurança : " seguranca
 
