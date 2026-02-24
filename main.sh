@@ -42,6 +42,34 @@ if [ "$comando" != "torrents" ]; then
     groupadd torrents
 fi
 
+echo -e "\n\nFoi criado um grupo de 'torrents'."
+echo -e "Lembre-se de adicionar seu usuário do SAMBA no grupo 'torrents'."
+echo -e "\tCaso tenha o SAMBA instalado!"
+
+# Definição de segurança.
+definicao_umask=0007
+while true; do
+    echo -e "\n\n#=== Definindo o nível de segurança dos arquivos. ===#"
+    echo "1. Usuário que não estão no grupo 'torrents', pode ver e copiar arquivos."
+    echo "2. Usuário que não estão no grupo 'torrents', não pode ver nada"
+    echo
+    read -p "Escolha uma definição de segurança : " seguranca
+
+    if   [ "$seguranca" = "1" ]; then
+        echo "Mais flexível"
+        definicao_umask=0002
+        sleep 1
+        break
+    elif [ "$seguranca" = "2" ]; then
+        echo "Mais seguro"
+        sleep 1
+        definicao_umask=0007
+        break
+    else
+        echo "Opção inválida!" ; sleep 3
+    fi
+done
+
 
 # Armazena a arquitetura.
 arquitetura=$(uname -m)
@@ -92,7 +120,7 @@ Description=Servidor de torrents (qBittorrent-nox)
 After=network.target
 
 [Service]
-UMask=0003
+UMask=$definicao_umask
 Group=torrents
 Type=simple
 ExecStart=${pasta_bin}/${arquivo_bin}
