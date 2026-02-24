@@ -8,23 +8,48 @@
     # Login : admin
     # Senha : adminadmin
 
+versao="2.0"
+
+if [ "$1" = "-V" -o "$1" = "--version" ]; then
+    echo "Versão : ${versao}."
+    exit 10
+fi
+
+
+# Testa se o usuário é root.
+usuario="$(whoami)"
+if [ "$usuario" != "root" ]; then
+    echo "Usuário $usuario não é root!"
+    echo "Tente \"sudo -i\" ou \"su - root\""
+    exit 20
+fi
+
 
 # Cria as pastas, caso não existam.
-pasta_systemd="$HOME/.config/systemd/user"
-pasta_bin="$HOME/.local/bin"
-pasta_ssl="$HOME/.local/ssl/qbittorrent-nox"
+pasta_systemd="/etc/systemd/system"
+pasta_bin="/usr/local/bin"
+pasta_ssl="/etc/ssl/qbittorrent-nox"
 [ -d "$pasta_systemd" ] || mkdir -p "$pasta_systemd"
 [ -d "$pasta_bin" ]     || mkdir -p "$pasta_bin"
 [ -d "$pasta_ssl" ]     || mkdir -p "$pasta_ssl"
 
 
-# Verifica a arquitetura.
+# Cria grupo de torrents caso não exista.
+comando="$(cut -d: -f1 /etc/group | grep torrents)"
+if [ "$comando" != "torrents" ]; then
+    groupadd torrents
+fi
+
+
+# Armazena a arquitetura.
 arquitetura=$(uname -m)
 
 
 # Armazena arquivos em váriaveis.
-arquivo_x86_64=$(realpath  $(find . -type f -name "*x86_64-qbittorrent-nox.tar.xz"))
-arquivo_aarch64=$(realpath $(find . -type f -name "*aarch64-qbittorrent-nox.tar.xz" ))
+arquivo_x86_64=$(realpath  $(find . -type f -name \
+    "*x86_64-qbittorrent-nox.tar.xz" ) 2> /dev/null)
+arquivo_aarch64=$(realpath $(find . -type f -name \
+    "*aarch64-qbittorrent-nox.tar.xz") 2> /dev/null)
 arquivo_bin=
 
 
@@ -35,6 +60,7 @@ function descompac_tar(){
 
 
 # Move o arquivo qbittorrent-nox para o ~/.local do usuário.
+echo -e "\n\nVerificando arquivos compactados." ; sleep 1
 if   [ "$arquitetura" = "x86_64" ]; then
     if [ -f "${arquivo_x86_64}" ]; then
         descompac_tar "${arquivo_x86_64}" "$(dirname "${arquivo_x86_64}")"
@@ -47,9 +73,7 @@ if   [ "$arquitetura" = "x86_64" ]; then
 elif [ "$arquitetura" = "aarch64" ]; then
     if [ -f "${arquivo_aarch64}" ]; then
         echo "$arquivo_aarch64"
-
         descompac_tar "${arquivo_aarch64}" "$(dirname "${arquivo_aarch64}")"
-
         chmod +x "${arquivo_aarch64%%.*}"
         mv "${arquivo_aarch64%%.*}" "$pasta_bin"
         arquivo_bin="aarch64-qbittorrent-nox"
@@ -60,12 +84,14 @@ fi
 
 
 # Crie o arquivo do serviço
+echo -e "\n\nCriando arquivo systemd." ; sleep 1
 echo "[Unit]
-Description=qBittorrent-nox (User Mode)
+Description=Servidor de torrents (qBittorrent-nox)
 After=network.target
 
 [Service]
-UMask=0002
+UMask=0003
+Group=torrents
 Type=simple
 ExecStart=${pasta_bin}/${arquivo_bin}
 Restart=on-failure
@@ -75,13 +101,13 @@ WantedBy=default.target" > "${pasta_systemd}/qbittorrent-nox.service"
 
 
 # Inicia serviço qbittorrent-nox
-systemctl --user daemon-reload
-systemctl --user enable qbittorrent-nox.service
-systemctl --user start qbittorrent-nox.service
+systemctl daemon-reload
+systemctl enable qbittorrent-nox.service
+systemctl start qbittorrent-nox.service
 
 
 # Cria um certificado.
-echo -e "Criando certificado..." && sleep 2
+echo -e "Criando certificado..." && sleep 1
 openssl req -x509 -nodes -newkey rsa:4096        \
         -keyout ${pasta_ssl}/qbittorrent-nox.key \
         -out ${pasta_ssl}/qbittorrent-nox.cert   \
@@ -90,13 +116,12 @@ echo -e "Certificado criado!\n" && sleep 2
 
 
 # Define a porta de acesso via web.
-sleep 2
-systemctl --user stop qbittorrent-nox.service
+systemctl stop qbittorrent-nox.service ; sleep 1
 
 read -p "Defina a porta de serviço web : " porta
 
 # Define a senha como adminadmin.
-echo -e "Criando arquivo de configuração.\n\n" && sleep 2
+echo -e "\nCriando arquivo de configuração.\n\n" && sleep 2
 echo -e "\
 [BitTorrent]
 Session\\\AddTorrentStopped=false
@@ -125,13 +150,14 @@ WebUI\\\Port=$porta\n" > $HOME/.config/qBittorrent/qBittorrent.conf
 
 
 # Inciando servidor.
-systemctl --user start qbittorrent-nox.service
-systemctl --user status qbittorrent-nox.service
+echo -e "\n\nAtivando os serviços." ; sleep 1
+systemctl start qbittorrent-nox.service
+systemctl status qbittorrent-nox.service
 
 
 #=== Como desinstalar ===#
-# Pare o serviço -> systemctl --user stop qbittorrent-nox.service
-# Tire da inicialização -> systemctl --user disable qbittorrent-nox.service
-# Remova o arquivo do daemon -> rm $HOME/.config/systemd/user/qbittorrent-nox.service
-# Remova o arquivo de configuração -> rm $HOME/.config/qBittorrent/qBittorrent.conf
-# Reinicia o daemon -> systemctl --user daemon-reload
+# Pare o serviço -> systemctl stop qbittorrent-nox.service
+# Tire da inicialização -> systemctl disable qbittorrent-nox.service
+# Remova o arquivo do systemd -> rm /etc/systemd/system/qbittorrent-nox.service
+# Remova o arquivo de configuração -> rm /root/.config/qBittorrent/qBittorrent.conf
+# Reinicia o daemon -> systemctl daemon-reload
