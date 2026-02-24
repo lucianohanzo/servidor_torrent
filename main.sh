@@ -32,9 +32,9 @@ pasta_systemd="/etc/systemd/system"
 pasta_bin="/usr/local/bin"
 pasta_ssl="/etc/ssl/qbittorrent-nox"
 pasta_config="$HOME/.config/qBittorrent"
-[ -d "$pasta_systemd" ] || mkdir -p "$pasta_systemd"
-[ -d "$pasta_bin" ]     || mkdir -p "$pasta_bin"
-[ -d "$pasta_ssl" ]     || mkdir -p "$pasta_ssl"
+[ -d "$pasta_systemd" ]  || mkdir -p "$pasta_systemd"
+[ -d "$pasta_bin" ]      || mkdir -p "$pasta_bin"
+[ -d "$pasta_ssl" ]      || mkdir -p "$pasta_ssl"
 [ -d "$pasta_config" ]   || mkdir -p "$pasta_config"
 
 # Cria grupo de torrents caso não exista.
@@ -152,7 +152,7 @@ echo -e "Certificado criado!" && sleep 2
 systemctl stop qbittorrent-nox.service ; sleep 1
 
 echo -e "\n#=== Definindo porta de serviço web ===#"
-read -p "Defina a porta de serviço web : " porta
+read -p "Defina a porta de serviço web : " porta_web
 
 # Define a senha como adminadmin.
 echo -e "\nCriando arquivo de configuração." && sleep 2
@@ -175,12 +175,12 @@ Proxy\\\Profiles\\\RSS=true
 
 [Preferences]
 MailNotification\\\req_auth=true
-Web\\\Port=$porta
+Web\\\Port=$porta_web
 WebUI\\\HTTPS\\\CertificatePath=${pasta_ssl}/qbittorrent-nox.cert
 WebUI\\\HTTPS\\\Enabled=true
 WebUI\\\HTTPS\\\KeyPath=${pasta_ssl}/qbittorrent-nox.key
 WebUI\\\Password_PBKDF2=\"@ByteArray(cjrkEmcVmY/rGCtkbKgKkA==:3EE66W4epajReEKx0/1O14miX2O0W+5x+1fs8DcDXyZPzZ7ZDqFKZFuJLxDoQYM9rf28MJQ/izfxr6nN7ArF8A==)\"
-WebUI\\\Port=$porta\n" > $HOME/.config/qBittorrent/qBittorrent.conf
+WebUI\\\Port=$porta_web\n" > $pasta_config/qBittorrent.conf
 
 
 # Inciando servidor.
