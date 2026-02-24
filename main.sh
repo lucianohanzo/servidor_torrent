@@ -35,7 +35,7 @@ pasta_config="$HOME/.config/qBittorrent"
 [ -d "$pasta_systemd" ] || mkdir -p "$pasta_systemd"
 [ -d "$pasta_bin" ]     || mkdir -p "$pasta_bin"
 [ -d "$pasta_ssl" ]     || mkdir -p "$pasta_ssl"
-[ -d "$pasta_config"]   || mkdir -p "$pasta_config"
+[ -d "$pasta_config" ]   || mkdir -p "$pasta_config"
 
 # Cria grupo de torrents caso não exista.
 comando="$(cut -d: -f1 /etc/group | grep torrents)"
