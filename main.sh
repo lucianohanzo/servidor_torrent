@@ -154,7 +154,7 @@ systemctl stop qbittorrent-nox.service ; sleep 1
 read -p "Defina a porta de serviço web : " porta
 
 # Define a senha como adminadmin.
-echo -e "\nCriando arquivo de configuração.\n\n" && sleep 2
+echo -e "\nCriando arquivo de configuração." && sleep 2
 echo -e "\
 [BitTorrent]
 Session\\\AddTorrentStopped=false
