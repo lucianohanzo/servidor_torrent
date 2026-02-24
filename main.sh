@@ -151,7 +151,7 @@ echo -e "Certificado criado!" && sleep 2
 # Define a porta de acesso via web.
 systemctl stop qbittorrent-nox.service ; sleep 1
 
-echo "\n#=== Definindo porta de serviço web ===#"
+echo -e "\n#=== Definindo porta de serviço web ===#"
 read -p "Defina a porta de serviço web : " porta
 
 # Define a senha como adminadmin.
