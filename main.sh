@@ -32,10 +32,13 @@ pasta_systemd="/etc/systemd/system"
 pasta_bin="/usr/local/bin"
 pasta_ssl="/etc/ssl/qbittorrent-nox"
 pasta_config="$HOME/.config/qBittorrent"
+pasta_local="$HOME/.local/share/"
 [ -d "$pasta_systemd" ]  || mkdir -p "$pasta_systemd"
 [ -d "$pasta_bin" ]      || mkdir -p "$pasta_bin"
 [ -d "$pasta_ssl" ]      || mkdir -p "$pasta_ssl"
 [ -d "$pasta_config" ]   || mkdir -p "$pasta_config"
+[ -d "$pasta_local" ]   || mkdir -p "$pasta_local"
+
 
 # Cria grupo de torrents caso não exista.
 comando="$(cut -d: -f1 /etc/group | grep torrents)"
