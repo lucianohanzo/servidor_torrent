@@ -133,13 +133,13 @@ ExecStart=${pasta_bin}/${arquivo_bin}
 Restart=on-failure
 
 [Install]
-WantedBy=default.target" > "${pasta_systemd}/qbittorrent-nox.service"
+WantedBy=multi-user.target" > "${pasta_systemd}/qbittorrent-nox.service"
 
 
 # Inicia serviço qbittorrent-nox
-systemctl daemon-reload
-systemctl enable qbittorrent-nox.service
-systemctl start qbittorrent-nox.service
+#systemctl daemon-reload
+#systemctl enable qbittorrent-nox.service
+#systemctl start qbittorrent-nox.service
 
 
 # Cria um certificado.
@@ -152,7 +152,7 @@ echo -e "Certificado criado!" && sleep 2
 
 
 # Define a porta de acesso via web.
-systemctl stop qbittorrent-nox.service ; sleep 1
+#systemctl stop qbittorrent-nox.service ; sleep 1
 
 echo -e "\n#=== Definindo porta de serviço web ===#"
 read -p "Defina a porta de serviço web : " porta_web
@@ -188,8 +188,10 @@ WebUI\\\Port=$porta_web\n" > $pasta_config/qBittorrent.conf
 
 # Inciando servidor.
 echo -e "\n\nAtivando os serviços." ; sleep 1
+# Inicia serviço qbittorrent-nox
+systemctl daemon-reload
+systemctl enable qbittorrent-nox.service
 systemctl start qbittorrent-nox.service
-systemctl status qbittorrent-nox.service
 
 
 #=== Como desinstalar ===#
