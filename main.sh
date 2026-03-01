@@ -132,6 +132,7 @@ Group=torrents
 
 Environment="HOME=/root"
 Environment="XDG_CONFIG_HOME=/root/.config"
+Environment="XDG_DATA_HOME=/root/.local/share"
 
 ExecStart=${pasta_bin}/${arquivo_bin}
 Restart=on-failure
