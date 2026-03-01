@@ -126,9 +126,13 @@ Description=Servidor de torrents (qBittorrent-nox)
 After=network.target
 
 [Service]
+Type=simple
 UMask=$definicao_umask
 Group=torrents
-Type=simple
+
+Environment="HOME=/root"
+Environment="XDG_CONFIG_HOME=/root/.config"
+
 ExecStart=${pasta_bin}/${arquivo_bin}
 Restart=on-failure
 
